@@ -4,22 +4,16 @@ import sbt._
 import Keys._
 import Defaults._
 
-
-object PamfletKeys {
-  val docs = SettingKey[File]("pamflet-docs")
-  val properties = SettingKey[File]("pamflet-properties")
-  val output = SettingKey[File]("pamflet-output")
-  val storage = SettingKey[Storage]("pamflet-storage")
-  val server = SettingKey[unfiltered.jetty.Http]("pamflet-server")
-  val start = TaskKey[Unit]("start-pamflet")
-  val stop = TaskKey[Unit]("stop-pamflet")
-  val write = TaskKey[Unit]("write-pamflet")
-}
-
 object PamfletPlugin extends Plugin {
-
   object pamflet {
-    import PamfletKeys._
+    val docs = SettingKey[File]("pamflet-docs")
+    val properties = SettingKey[File]("pamflet-properties")
+    val output = SettingKey[File]("pamflet-output")
+    val storage = SettingKey[Storage]("pamflet-storage")
+    val server = SettingKey[unfiltered.jetty.Http]("pamflet-server")
+    val start = TaskKey[Unit]("start-pamflet")
+    val stop = TaskKey[Unit]("stop-pamflet")
+    val write = TaskKey[Unit]("write-pamflet")
 
     val baseSettings: Seq[Project.Setting[_]] = Seq(
       docs <<= baseDirectory / "docs",
