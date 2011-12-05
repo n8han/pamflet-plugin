@@ -16,10 +16,10 @@ object Pamflet extends Plugin {
   val writePamflet = TaskKey[Unit]("write-pamflet")
 
   override lazy val settings = 
-    baseSettings ++ Seq(
+    baseSettings /*++ Seq(
       pamfletDocs, pamfletProperties, pamfletOutput, pamfletStorage,
       pamfletServer, startPamflet, stopPamflet, writePamflet
-    ).map { s => (aggregate in s) := false }
+    ).map(s => (aggregate in s) := false)*/
 
   val baseSettings: Seq[Project.Setting[_]] = Seq(
     pamfletDocs <<= baseDirectory / "docs",
