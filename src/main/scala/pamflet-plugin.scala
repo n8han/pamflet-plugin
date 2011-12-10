@@ -5,7 +5,7 @@ import Keys._
 import Defaults._
 
 object PamfletPlugin extends Plugin {
-  object pamflet {
+  object PamfletKeys {
     val docs = SettingKey[File]("pamflet-docs")
     val properties = SettingKey[File]("pamflet-properties")
     val output = SettingKey[File]("pamflet-output")
@@ -14,6 +14,10 @@ object PamfletPlugin extends Plugin {
     val start = TaskKey[Unit]("start-pamflet")
     val stop = TaskKey[Unit]("stop-pamflet")
     val write = TaskKey[Unit]("write-pamflet")
+  }
+
+  object pamflet {
+    import PamfletKeys._
 
     val baseSettings: Seq[Project.Setting[_]] = Seq(
       docs <<= baseDirectory / "docs",
@@ -33,9 +37,11 @@ object PamfletPlugin extends Plugin {
 
     private def startPamfletTask = (server) map { (server) =>
       server.start
+
       unfiltered.util.Browser.open(
         "http://127.0.0.1:%d/".format(server.port)
       )
+
       ()
     }
 
@@ -50,11 +56,10 @@ object PamfletPlugin extends Plugin {
         Produce(storage.contents, output)
     }
   }
-  
-  override lazy val settings = pamflet.baseSettings 
-    // FIXME: seems that it's not working in sbt 0.11 
-    // ++ Seq(
-    //   docs, properties, output, storage,
-    //   server, start, stop, write
-    // ).map(s => (aggregate in s) := false)
+
+  import PamfletKeys._
+
+  override lazy val settings = pamflet.baseSettings ++ 
+    Seq(docs, properties, output, storage, server).map(s => aggregate in s := false) ++
+    Seq(start, stop, write ).map(s => aggregate in s := false)
 }
