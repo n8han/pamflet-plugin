@@ -25,7 +25,10 @@ object PamfletPlugin extends Plugin {
       output <<= target / "docs",
       storage <<= (docs, properties) {
         (docs, properties) =>
-          FileStorage(docs, StringTemplate(properties))
+          FileStorage(docs, properties match {
+            case file if file.exists => Some(file)
+            case _ => None
+          })
       },
       server <<= (storage) { (storage) =>
         Preview(storage.contents)
